@@ -43,7 +43,7 @@ frontend/
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone [<your-repo-url>](https://github.com/HardikJain02/supervocab)
+   git clone [https://github.com/HardikJain02/supervocab]
    cd frontend
    ```
 2. **Set up environment variables:**
@@ -74,7 +74,7 @@ npm run dev
 ### Installation
 1. **Navigate to the backend directory:**
    ```bash
-   cd nova/backend
+   cd backend
    ```
 2. **Install dependencies:**
    ```bash
