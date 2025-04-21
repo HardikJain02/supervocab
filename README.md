@@ -43,7 +43,7 @@ frontend/
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/HardikJain02/supervocab]
+   git clone https://github.com/HardikJain02/supervocab
    cd frontend
    ```
 2. **Set up environment variables:**
