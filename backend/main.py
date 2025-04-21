@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from .session_routes import router as session_router
-from .db import init_db
+from .routers.session import router as session_router
+from .models.db import init_db
 from fastapi.middleware.cors import CORSMiddleware
-from .speech_routes import router as speech_router
+from .routers.speech import router as speech_router
 
 app = FastAPI()
 

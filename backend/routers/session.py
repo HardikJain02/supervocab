@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from .db import AsyncSessionLocal, User, Session
-from .schemas import StartSessionRequest, StartSessionResponse, ContinueSessionRequest
-from .openai_client import get_system_prompt, stream_llm_response
-from .utils import get_greeting
+from ..models.db import AsyncSessionLocal, User, Session
+from ..schemas.session import StartSessionRequest, StartSessionResponse, ContinueSessionRequest
+from ..services.openai_service import get_system_prompt, stream_llm_response
+from ..utils.greeting import get_greeting
 from fastapi.responses import StreamingResponse, FileResponse, JSONResponse
 import uuid
 import json

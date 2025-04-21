@@ -6,6 +6,7 @@ import { useSession } from '../../context/SessionContext';
 import { useMessages } from '../../context/MessagesContext';
 import type { ExerciseData } from '../../types';
 import useChatStream from '../../hooks/useChatStream';
+import { transformExerciseData } from '../../utils/exercise';
 
 /**
  * Main chat application container that combines the chat window and input
@@ -16,28 +17,6 @@ const ChatApp: React.FC = () => {
   const [exerciseMode, setExerciseMode] = useState(false);
   const [exerciseData, setExerciseData] = useState<Exercise[] | null>(null);
   const { sendHiddenMessage } = useChatStream();
-
-  // Helper to transform ExerciseData to Exercise[] for the widget
-  const transformExerciseData = (exercises: ExerciseData): Exercise[] => [
-    {
-      level: 'Basic',
-      correctSentence: exercises.basic.unscrambled,
-      scrambledSentence: exercises.basic.scrambled,
-      timeLimit: 20,
-    },
-    {
-      level: 'Intermediate',
-      correctSentence: exercises.intermediate.unscrambled,
-      scrambledSentence: exercises.intermediate.scrambled,
-      timeLimit: 40,
-    },
-    {
-      level: 'Advanced',
-      correctSentence: exercises.advanced.unscrambled,
-      scrambledSentence: exercises.advanced.scrambled,
-      timeLimit: 60,
-    },
-  ];
 
   // Listen for new assistant messages with exercises
   React.useEffect(() => {

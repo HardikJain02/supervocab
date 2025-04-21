@@ -4,9 +4,12 @@ import { startSession } from '../utils/api';
 import { useSession } from '../context/SessionContext';
 import { useMessages } from '../context/MessagesContext';
 import type { UserInfo, StartSessionPayload } from '../types';
+import { ALL_LANGUAGES } from '../utils/languageOptions';
+import { validateForm } from '../utils/onboardingValidation';
+import { TextField, SelectField } from './FormFields';
 
 // Form types
-interface FormData {
+export interface FormData {
   name: string;
   sourceLanguage: string;
   targetLanguage: string;
@@ -33,43 +36,6 @@ interface SelectFieldProps extends BaseFieldProps {
 }
 
 type FormFieldProps = TextFieldProps | SelectFieldProps;
-
-// Language Options
-const LANGUAGES = {
-  // Indian languages
-  indian: [
-    { value: 'Hindi', label: 'Hindi' },
-    { value: 'Bengali', label: 'Bengali' },
-    { value: 'Telugu', label: 'Telugu' },
-    { value: 'Marathi', label: 'Marathi' },
-    { value: 'Tamil', label: 'Tamil' },
-    { value: 'Urdu', label: 'Urdu' },
-    { value: 'Gujarati', label: 'Gujarati' },
-    { value: 'Kannada', label: 'Kannada' },
-    { value: 'Odia', label: 'Odia' },
-    { value: 'Malayalam', label: 'Malayalam' },
-    { value: 'Punjabi', label: 'Punjabi' },
-  ],
-  // Popular foreign languages
-  foreign: [
-    { value: 'English', label: 'English' },
-    { value: 'Spanish', label: 'Spanish' },
-    { value: 'French', label: 'French' },
-    { value: 'German', label: 'German' },
-    { value: 'Chinese', label: 'Chinese (Mandarin)' },
-    { value: 'Japanese', label: 'Japanese' },
-    { value: 'Korean', label: 'Korean' },
-    { value: 'Russian', label: 'Russian' },
-    { value: 'Arabic', label: 'Arabic' },
-    { value: 'Portuguese', label: 'Portuguese' },
-    { value: 'Italian', label: 'Italian' },
-  ]
-};
-
-// All languages combined for source language dropdown
-const ALL_LANGUAGES = [...LANGUAGES.indian, ...LANGUAGES.foreign].sort((a, b) => 
-  a.label.localeCompare(b.label)
-);
 
 // Form field configuration (DRY version)
 const FORM_FIELD_CONFIG = [
@@ -100,74 +66,6 @@ const initialFormState: FormData = {
 };
 
 // Memoized components
-const TextField = memo(({
-  type,
-  id,
-  label,
-  value,
-  onChange,
-  disabled,
-  placeholder
-}: TextFieldProps) => (
-  <div className="mb-4">
-    <label htmlFor={id} className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-      {label}
-    </label>
-    <input
-      type={type}
-      id={id}
-      value={value}
-      onChange={onChange}
-      required
-      placeholder={placeholder}
-      className="w-full px-4 py-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 dark:focus:ring-blue-400 dark:focus:border-blue-400 dark:text-white disabled:opacity-70 placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors duration-200"
-      disabled={disabled}
-    />
-  </div>
-));
-
-TextField.displayName = 'TextField';
-
-const SelectField = memo(({
-  type,
-  id,
-  label,
-  value,
-  onChange,
-  options,
-  disabled
-}: SelectFieldProps) => (
-  <div className="mb-4">
-    <label htmlFor={id} className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-      {label}
-    </label>
-    <div className="relative">
-      <select
-        id={id}
-        value={value}
-        onChange={onChange}
-        required
-        disabled={disabled}
-        className="w-full px-4 py-3 pr-10 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 dark:focus:ring-blue-400 dark:focus:border-blue-400 dark:text-white disabled:opacity-70 transition-colors duration-200 appearance-none cursor-pointer"
-      >
-        {options.map(option => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {/* Dropdown arrow indicator */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 dark:text-slate-400">
-        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-      </div>
-    </div>
-  </div>
-));
-
-SelectField.displayName = 'SelectField';
-
 const Spinner = () => (
   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -217,17 +115,10 @@ const UserOnboardingModal: React.FC<UserOnboardingModalProps> = ({ onSuccess }) 
     },
   });
 
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      setFormError('Please enter your name');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm(formData)) {
+      setFormError('Please enter your name');
       return;
     }
     
