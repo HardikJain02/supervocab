@@ -81,7 +81,6 @@ npm run dev
    - Create a `.env` file in `backend/` with:
      ```env
      OPENAI_API_KEY=your-openai-key
-     BACKEND_URL=http://localhost:8000
      ```
 
 ### Running the Backend
