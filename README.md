@@ -43,10 +43,15 @@ frontend/
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
-   cd nova/frontend
+   git clone [<your-repo-url>](https://github.com/HardikJain02/supervocab)
+   cd frontend
    ```
-2. **Install dependencies:**
+2. **Set up environment variables:**
+   - Create a `.env` file in `frontend/` with:
+     ```env
+     VITE_API_BASE=http://localhost:8000
+     
+3. **Install dependencies:**
    ```bash
    npm install
    ```
@@ -90,17 +95,6 @@ uvicorn backend.main:app --reload
 ```
 - The API will be available at [http://localhost:8000](http://localhost:8000)
 - Interactive docs: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### Example `requirements.txt`
-```
-fastapi
-uvicorn[standard]
-sqlalchemy[asyncio]
-aiosqlite
-python-dotenv
-gtts
-openai
-```
 
 ### Database
 
