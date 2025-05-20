@@ -1,4 +1,4 @@
-# Language Learning Chat App (Frontend)
+# Language Vocab Learning Chat App
 
 A modern, interactive language learning web application featuring AI-powered chat, personalized onboarding, and gamified sentence exercises. Built with React, TypeScript, and Tailwind CSS.
 
